@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Abdul-Ghaffar Kukoyi — Data Analyst</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12151B;
+    --panel:#1A1F28;
+    --panel-2:#20262F;
+    --line:#2C3340;
+    --paper:#EDEAE1;
+    --paper-dim:#A7ACB6;
+    --amber:#E3A63E;
+    --amber-dim:#8A6A2E;
+    --teal:#4FC3B0;
+    --red:#C7654A;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--sans);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 32px;}
+  @media (max-width:640px){ .wrap{padding:0 20px;} }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(18,21,27,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:64px;
+  }
+  .brand{
+    font-family:var(--mono); font-weight:600; font-size:14px;
+    letter-spacing:0.02em;
+  }
+  .brand span{color:var(--amber);}
+  .navlinks{display:flex; gap:28px; font-family:var(--mono); font-size:13px; color:var(--paper-dim);}
+  .navlinks a{text-decoration:none; transition:color .15s ease;}
+  .navlinks a:hover{color:var(--paper);}
+  @media (max-width:640px){ .navlinks{display:none;} }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:88px 0 64px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+    overflow:hidden;
+  }
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.12em;
+    color:var(--teal); text-transform:uppercase; margin-bottom:20px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{
+    content:''; width:8px; height:8px; background:var(--teal); border-radius:1px;
+    display:inline-block;
+  }
+  .hero h1{
+    font-family:var(--sans); font-weight:700;
+    font-size:clamp(32px, 5vw, 52px);
+    line-height:1.12;
+    letter-spacing:-0.01em;
+    max-width:780px;
+    margin-bottom:22px;
+  }
+  .hero h1 em{
+    font-style:normal; color:var(--amber);
+  }
+  .hero p.lede{
+    font-size:17px; color:var(--paper-dim); max-width:560px; margin-bottom:36px;
+  }
+  .hero-cta{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:64px;}
+  .btn{
+    font-family:var(--mono); font-size:13px; font-weight:500;
+    padding:13px 22px; border-radius:3px; text-decoration:none;
+    letter-spacing:0.01em;
+    display:inline-flex; align-items:center; gap:8px;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .btn-primary{background:var(--amber); color:#191308;}
+  .btn-primary:hover{transform:translateY(-1px); background:#f0b452;}
+  .btn-ghost{border:1px solid var(--line); color:var(--paper);}
+  .btn-ghost:hover{border-color:var(--paper-dim); transform:translateY(-1px);}
+
+  /* signature: scatter -> bars */
+  .signature{
+    height:220px;
+    position:relative;
+    border-top:1px solid var(--line);
+    padding-top:28px;
+  }
+  .sig-label{
+    font-family:var(--mono); font-size:11px; color:var(--paper-dim);
+    letter-spacing:0.08em; text-transform:uppercase; margin-bottom:14px;
+  }
+  #sigCanvas{width:100%; height:150px; display:block;}
+
+  /* ---------- STATS STRIP ---------- */
+  .stats{
+    border-bottom:1px solid var(--line);
+    background:var(--panel);
+  }
+  .stats .wrap{
+    display:grid; grid-template-columns:repeat(4,1fr);
+    gap:0;
+  }
+  .stat{
+    padding:28px 20px; border-left:1px solid var(--line);
+  }
+  .stat:first-child{border-left:none;}
+  .stat .num{
+    font-family:var(--mono); font-weight:600; font-size:26px; color:var(--amber);
+  }
+  .stat .lbl{
+    font-family:var(--mono); font-size:11px; color:var(--paper-dim);
+    margin-top:6px; letter-spacing:0.02em;
+  }
+  @media (max-width:720px){
+    .stats .wrap{grid-template-columns:repeat(2,1fr);}
+    .stat{border-left:none; border-top:1px solid var(--line);}
+    .stat:nth-child(-n+2){border-top:none;}
+  }
+
+  /* ---------- SECTION SHELL ---------- */
+  section.case{
+    padding:80px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .case-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    gap:20px; margin-bottom:36px; flex-wrap:wrap;
+  }
+  .case-tag{
+    font-family:var(--mono); font-size:12px; color:var(--teal);
+    letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px;
+  }
+  .case-tag.alt{color:var(--red);}
+  .case h2{
+    font-size:clamp(24px,3.4vw,34px); font-weight:700; max-width:640px;
+    line-height:1.2;
+  }
+  .case .meta{
+    font-family:var(--mono); font-size:12px; color:var(--paper-dim);
+    text-align:right; white-space:nowrap;
+  }
+  .case-body{
+    display:grid; grid-template-columns:1fr 1fr; gap:48px; margin-bottom:32px;
+  }
+  @media (max-width:800px){ .case-body{grid-template-columns:1fr;} }
+  .case-body p{color:var(--paper-dim); font-size:15px; margin-bottom:16px;}
+  .case-body p strong{color:var(--paper); font-weight:600;}
+  .tool-list{
+    display:flex; flex-wrap:wrap; gap:8px; margin-top:20px;
+  }
+  .tool-pill{
+    font-family:var(--mono); font-size:11.5px; color:var(--paper);
+    border:1px solid var(--line); border-radius:20px; padding:6px 13px;
+    background:var(--panel-2);
+  }
+  .findings{
+    list-style:none;
+  }
+  .findings li{
+    font-size:14.5px; color:var(--paper-dim); padding-left:20px; position:relative;
+    margin-bottom:12px;
+  }
+  .findings li::before{
+    content:'→'; position:absolute; left:0; color:var(--amber);
+    font-family:var(--mono);
+  }
+  .findings li strong{color:var(--paper); font-weight:600;}
+
+  /* viz embed frame */
+  .viz-frame{
+    border:1px solid var(--line);
+    background:var(--panel);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .viz-frame-head{
+    display:flex; align-items:center; gap:8px;
+    padding:12px 16px; border-bottom:1px solid var(--line);
+    font-family:var(--mono); font-size:11px; color:var(--paper-dim);
+  }
+  .dot{width:8px; height:8px; border-radius:50%; display:inline-block;}
+  .dot.r{background:#C7654A;} .dot.y{background:#E3A63E;} .dot.g{background:#4FC3B0;}
+  .viz-embed-body{ min-height:520px; }
+  .tableauPlaceholder{ width:100%; }
+
+  .placeholder-note{
+    padding:40px 24px; text-align:center; color:var(--paper-dim);
+    font-family:var(--mono); font-size:12.5px; line-height:1.7;
+  }
+
+  /* ---------- SKILLS ---------- */
+  .skills-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line);
+  }
+  .skill-cell{background:var(--ink); padding:22px 20px;}
+  .skill-cell h4{
+    font-family:var(--mono); font-size:11px; color:var(--teal);
+    letter-spacing:0.08em; text-transform:uppercase; margin-bottom:10px;
+  }
+  .skill-cell p{font-size:14px; color:var(--paper-dim);}
+  @media (max-width:720px){ .skills-grid{grid-template-columns:repeat(2,1fr);} }
+
+  /* ---------- CONTACT / FOOTER ---------- */
+  footer{padding:80px 0 60px;}
+  footer h2{
+    font-size:clamp(26px,4vw,40px); font-weight:700; max-width:620px; margin-bottom:20px;
+  }
+  footer h2 em{font-style:normal; color:var(--amber);}
+  footer p{color:var(--paper-dim); max-width:480px; margin-bottom:32px; font-size:15.5px;}
+  .contact-links{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:56px;}
+  .foot-bottom{
+    display:flex; justify-content:space-between; align-items:center;
+    border-top:1px solid var(--line); padding-top:24px;
+    font-family:var(--mono); font-size:11.5px; color:var(--paper-dim);
+    flex-wrap:wrap; gap:10px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    * { animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">AGK<span>.</span>ANALYTICS</div>
+    <div class="navlinks">
+      <a href="#ecommerce">The Project</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Data Analyst · SQL / Tableau / R</div>
+    <h1>I turn messy store and transaction data into <em>the one number you actually needed.</em></h1>
+    <p class="lede">A look at how I work: pulling a 50,000-row e-commerce dataset apart with SQL and turning it into a dashboard a founder can actually read.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#ecommerce">See the dashboard →</a>
+      <a class="btn btn-ghost" href="#contact">Get in touch</a>
+    </div>
+
+    <div class="signature">
+      <div class="sig-label">50,000 rows → 1 clear read</div>
+      <canvas id="sigCanvas"></canvas>
+    </div>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="wrap">
+    <div class="stat"><div class="num">50K</div><div class="lbl">ROWS OF DATA</div></div>
+    <div class="stat"><div class="num">4</div><div class="lbl">SQL BUSINESS QUESTIONS</div></div>
+    <div class="stat"><div class="num">4</div><div class="lbl">DASHBOARD VISUALIZATIONS</div></div>
+    <div class="stat"><div class="num">1</div><div class="lbl">CLEAR TAKEAWAY</div></div>
+  </div>
+</div>
+
+<!-- ================= ECOMMERCE CASE (LIVE) ================= -->
+<section class="case" id="ecommerce">
+  <div class="wrap">
+    <div class="case-head">
+      <div>
+        <div class="case-tag">Live Dashboard</div>
+        <h2>E-Commerce Performance Analytics</h2>
+      </div>
+      <div class="meta">SQL (MySQL Workbench)<br>Tableau Public</div>
+    </div>
+
+    <div class="case-body">
+      <div>
+        <p>I built a 50,000-row e-commerce dataset and wrote four SQL questions I actually cared about: where shipping costs were quietly eating margin, which platforms were driving real revenue, how marketing spend compared across channels, and which product categories were actually profitable.</p>
+        <p>Then I put the answers into one Tableau dashboard, because a spreadsheet full of query results doesn't help anyone make a decision. <strong>This is basically what I'd build for your store — one place to see what's working and what's quietly costing you money.</strong></p>
+        <div class="tool-list">
+          <span class="tool-pill">MySQL Workbench</span>
+          <span class="tool-pill">SQL Joins &amp; Aggregates</span>
+          <span class="tool-pill">Tableau Public</span>
+          <span class="tool-pill">Data Cleaning</span>
+        </div>
+      </div>
+      <ul class="findings">
+        <li><strong>Shipping costs</strong> were quietly eating into profit on certain orders — easy to miss without pulling the numbers apart</li>
+        <li><strong>Not all sales channels are equal</strong> — some looked busy but weren't actually driving revenue</li>
+        <li><strong>Marketing spend</strong> compared side by side, so it's obvious which channels are worth the money</li>
+        <li><strong>Some product categories</strong> looked good on paper but weren't actually profitable once costs were factored in</li>
+      </ul>
+    </div>
+
+    <div class="viz-frame">
+      <div class="viz-frame-head">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        &nbsp;&nbsp;live — public.tableau.com
+      </div>
+      <div class="viz-embed-body">
+        <iframe
+          src="https://public.tableau.com/views/E-CommercePerformanceDashboard_17851821365460/Dashboard1?:showVizHome=no&:embed=true&:toolbar=yes"
+          width="100%"
+          height="560"
+          frameborder="0"
+          style="display:block; border:none;"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SKILLS ================= -->
+<section class="case" id="skills" style="padding-bottom:0;">
+  <div class="wrap">
+    <div class="case-tag">Toolkit</div>
+    <h2 style="margin-bottom:32px;">What I work in</h2>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-cell"><h4>Languages</h4><p>SQL, R, Python (working)</p></div>
+    <div class="skill-cell"><h4>Visualization</h4><p>Tableau, Tableau Public, Excel Dashboards</p></div>
+    <div class="skill-cell"><h4>Cloud</h4><p>AWS, Azure</p></div>
+    <div class="skill-cell"><h4>Core Skills</h4><p>Data Cleaning, Trend Analysis, Dashboard Design</p></div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <h2>Got a data problem worth <em>15 minutes</em>?</h2>
+    <p>I work with Shopify stores to turn the data scattered across your store, Klaviyo, and everything else into something you'd actually check. Happy to just talk it through first.</p>
+    <div class="contact-links">
+      <a class="btn btn-primary" href="mailto:ghaffar.kukoyi@gmail.com">Email me →</a>
+      <a class="btn btn-ghost" href="https://public.tableau.com/app/profile/abdul.ghaffar.kukoyi" target="_blank" rel="noopener">Tableau Public profile</a>
+    </div>
+    <div class="foot-bottom">
+      <span>Abdul-Ghaffar Kukoyi — B.S. Information Technology, Towson University</span>
+      <span>Based in the DMV</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Signature animation: scattered points assemble into a bar chart
+  const canvas = document.getElementById('sigCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, DPR;
+  function resize(){
+    DPR = window.devicePixelRatio || 1;
+    W = canvas.clientWidth; H = canvas.clientHeight;
+    canvas.width = W * DPR; canvas.height = H * DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const barCount = 14;
+  const barHeights = [0.3,0.55,0.4,0.7,0.5,0.85,0.6,0.95,0.45,0.65,0.5,0.75,0.35,0.6];
+  const points = [];
+  const N = 240;
+  for(let i=0;i<N;i++){
+    points.push({
+      sx: Math.random()*W, sy: Math.random()*H,
+      x:0, y:0
+    });
+  }
+
+  function layoutTargets(){
+    const margin = 20;
+    const gap = 6;
+    const barW = (W - margin*2 - gap*(barCount-1)) / barCount;
+    let idx = 0;
+    for(let b=0; b<barCount; b++){
+      const bh = barHeights[b] * (H - 30);
+      const bx = margin + b*(barW+gap);
+      const perBar = Math.floor(N / barCount);
+      for(let p=0; p<perBar; p++){
+        if(idx >= points.length) break;
+        const px = bx + Math.random()*barW;
+        const py = H - Math.random()*bh;
+        points[idx].x = px; points[idx].y = py;
+        points[idx].barIndex = b;
+        idx++;
+      }
+    }
+    while(idx < points.length){
+      const b = Math.floor(Math.random()*barCount);
+      const bh = barHeights[b]*(H-30);
+      const barW = (W - margin*2 - gap*(barCount-1)) / barCount;
+      const bx = margin + b*(barW+gap);
+      points[idx].x = bx + Math.random()*barW;
+      points[idx].y = H - Math.random()*bh;
+      points[idx].barIndex = b;
+      idx++;
+    }
+  }
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const colors = ['#E3A63E','#4FC3B0','#EDEAE1'];
+
+  let start = null;
+  const duration = prefersReduced ? 1 : 1600;
+
+  function frame(ts){
+    if(!start) start = ts;
+    const t = Math.min(1, (ts-start)/duration);
+    const ease = 1 - Math.pow(1-t, 3);
+    ctx.clearRect(0,0,W,H);
+    for(let i=0;i<points.length;i++){
+      const p = points[i];
+      const cx = p.sx + (p.x - p.sx)*ease;
+      const cy = p.sy + (p.y - p.sy)*ease;
+      ctx.fillStyle = colors[p.barIndex % 3];
+      ctx.globalAlpha = 0.55 + 0.45*ease;
+      ctx.beginPath();
+      ctx.arc(cx, cy, 1.6, 0, Math.PI*2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    if(t < 1){
+      requestAnimationFrame(frame);
+    }
+  }
+
+  function start_anim(){
+    resize();
+    layoutTargets();
+    start = null;
+    requestAnimationFrame(frame);
+  }
+
+  // Kick off once fonts/layout settle
+  window.addEventListener('load', start_anim);
+  setTimeout(start_anim, 50);
+</script>
+
+</body>
+</html>
